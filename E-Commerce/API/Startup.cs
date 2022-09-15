@@ -1,15 +1,13 @@
+using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Repository;
+using Repository.Interfaces;
 
 namespace API
 {
@@ -25,12 +23,23 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionStringConfig = Configuration.GetConnectionString("DefaultDatabase");
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
+
+
+            services.AddDbContext<StoreDbContext>(options =>
+              options.UseSqlServer(connectionStringConfig));
+
+            //DependencyInjection
+
+            services.AddTransient<IProduct, ProductRepository>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +53,13 @@ namespace API
             }
 
             app.UseRouting();
+
+            app.UseCors(options => options
+                         .AllowAnyOrigin()
+                         .AllowAnyHeader()
+                         .AllowAnyMethod()
+
+                         .SetIsOriginAllowed(origin => true));
 
             app.UseAuthorization();
 
