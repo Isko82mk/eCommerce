@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
+using System;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -26,6 +27,14 @@ namespace API.Controllers
         {
             return Ok(await _dbProduct.GetProductAsync(id));
         }
+
+
+        
+        public async Task<IActionResult> AddProduct()
+        {
+            return Ok(new NotImplementedException());
+        }
+
 
     }
 }
