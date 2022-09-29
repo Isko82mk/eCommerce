@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/products")]
-    [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseController
     {
         private readonly IProduct _dbProduct;
 
@@ -25,15 +23,22 @@ namespace API.Controllers
         [HttpGet("product")]
         public async Task<IActionResult>GetProduct(int id)
         {
-            return Ok(await _dbProduct.GetProductAsync(id));
+           var product= await _dbProduct.GetProductAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
         }
 
 
         
-        public async Task<IActionResult> AddProduct()
+ /*       public async Task<IActionResult> AddProduct()
         {
-            return Ok(new NotImplementedException());
-        }
+            return Ok( new NotImplementedException())
+        }*/
 
 
     }
