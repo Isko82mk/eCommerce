@@ -5,13 +5,18 @@ import {
   ThemeProvider,
 } from '@mui/material';
 import { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+
 import About from '../../features/about/About';
 import Catalog from '../../features/catalog/Catalog';
 import Contact from '../../features/contact/Contact';
 import ProductDetails from '../../features/details/ProductDetails';
 import Home from '../../features/home/Home';
 import Header from './Header';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Route } from 'react-router-dom';
+import ServerError from '../errors/ServerError';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -34,16 +39,17 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer position="bottom-right" />
+
       <CssBaseline />
       <Header darkMode={darkMode} handleThemeChange={themeChangeHandler} />
       <Container>
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/details/:id" element={<ProductDetails />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        <Route path="/home" component={Home} />
+        <Route path="/catalog" component={Catalog} />
+        <Route path="/details/:id" component={ProductDetails} />
+        <Route path="/about" component={About} />
+        <Route path="/contact" component={Contact} />
+        <Route path="/server-error" component={ServerError} />
       </Container>
     </ThemeProvider>
   );
